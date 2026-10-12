@@ -184,7 +184,7 @@ def build(background: Path) -> Path:
     notes(s, "13.39–13.52", 13, "Menjelaskan facade.", "Bandingkan pemanggilan repository dengan isi empat operation file.", "Mengapa facade tidak menjadi god object?", "api_client.dart + data/crud.")
     n += 1
 
-    s = two_cards(prs, n, "SECURITY", "Public API bukan tempat menaruh API key AI", ("JSONPlaceholder", ["No login", "No key", "Public demo data", "HTTPS"], "P", d.CYAN), ("AI provider key", ["Milik tool/backend", "Tidak pernah di Flutter", "Quota + rotation", "Redact dari log/prompt"], "K", d.RED), "Endpoint publik dan provider credential mempunyai threat model yang berbeda.")
+    s = two_cards(prs, n, "SECURITY", "Public API bukan tempat menaruh API key AI", ("JSONPlaceholder", ["No login", "No key", "Public demo data", "HTTPS"], "P", d.CYAN), ("AI provider key", ["Milik tool developer", "Tidak pernah di Flutter", "Quota + rotation", "Redact dari log/prompt"], "K", d.RED), "Endpoint publik dan provider credential mempunyai threat model yang berbeda.")
     notes(s, "13.52–14.05", 13, "Membedakan public API dan secret.", "Pastikan tidak ada fake login atau key di app.", "Mengapa APK tidak dapat menyimpan secret?", "Security baseline.")
     n += 1
 
@@ -273,7 +273,7 @@ def build(background: Path) -> Path:
         ["--dart-define", "Tidak untuk secret", "Nilai masuk build"],
         ["Asset/.env bundled", "Tidak", "Terkirim ke pengguna"],
         ["OpenCode /connect", "Tool credential", "Untuk developer workstation"],
-        ["Backend secret manager", "Ya untuk runtime", "Proxy + auth + quota"],
+        ["Runtime AI production", "Di luar scope", "Butuh arsitektur terpisah"],
     ], Inches(0.62), Inches(1.35), Inches(12.08), Inches(4.95), widths=[Inches(3.4), Inches(2.1), Inches(6.58)], font_size=13)
     d.add_text(s, "Obfuscation menyulitkan pembacaan; tidak mengubah client menjadi secret store.", Inches(0.9), Inches(6.52), Inches(11.5), Inches(0.28), size=14, color=d.RED, bold=True, align=PP_ALIGN.CENTER)
     notes(s, "AI", 15, "Menetapkan secret boundary.", "Minta peserta menemukan lokasi key yang salah dari contoh.", "Apa yang dilakukan bila key ter-commit?", "AI setup doc.")

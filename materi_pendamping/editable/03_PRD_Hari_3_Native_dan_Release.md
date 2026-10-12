@@ -86,5 +86,5 @@ telah menjalankan test tanpa evidence.
 
 PRD, behavior map, app Migration Lab, WebView boundary, Agent Skill, hasil
 analyze/test/build, dan handover gap tersedia. Rewrite seluruh aplikasi,
-JavaScript bridge produksi, perubahan backend, deployment store, dan fitur AI di
+JavaScript bridge produksi, perubahan kontrak API, deployment store, dan fitur AI di
 runtime aplikasi berada di luar scope Hari 3.

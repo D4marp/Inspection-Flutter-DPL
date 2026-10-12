@@ -46,8 +46,9 @@ retention policy yang telah disetujui. `/init` menganalisis project dan membuat
 
 - API key OpenCode adalah credential tool developer, bukan credential aplikasi.
 - Jangan menaruh key pada Dart constant, `--dart-define`, asset, atau APK/IPA.
-- Integrasi AI dari aplikasi production harus melalui backend proxy yang
-  menangani authentication, authorization, quota, redaction, dan audit.
+- Integrasi AI runtime berada di luar scope kelas dan memerlukan arsitektur
+  tepercaya yang menangani authentication, authorization, quota, redaction,
+  dan audit.
 - File `.env` diabaikan Git, tetapi environment variable tetap dapat bocor ke
   process list, shell history, crash report, atau log bila digunakan sembarangan.
 - Cabut/rotate key segera bila pernah ter-commit.

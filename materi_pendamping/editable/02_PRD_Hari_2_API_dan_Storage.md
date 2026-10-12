@@ -90,5 +90,5 @@ Mapping berada di `json_placeholder_mapper.dart`, bukan di widget atau model.
 
 Empat method CRUD dapat didemokan, batas simulasi dapat dijelaskan, tutorial
 pembuatan per file tersedia, picker mempunyai scope yang benar, dan quality gate
-lulus. Persistence nyata, auth, upload multipart, database, dan backend
+lulus. Persistence nyata, auth, upload multipart, database, dan layanan
 production berada di luar scope inti Hari 2.

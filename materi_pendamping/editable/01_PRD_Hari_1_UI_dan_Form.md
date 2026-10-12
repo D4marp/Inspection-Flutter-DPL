@@ -6,7 +6,7 @@
 ## Tujuan dan konteks
 Menghasilkan prototipe Flutter yang memungkinkan pengguna melihat daftar inspeksi, membuka detail, dan menambah catatan dengan validasi. Hari 1 memakai data lokal dalam memori agar peserta dapat memusatkan perhatian pada Dart, widget, navigation, dan state. Ini kasus pelatihan, bukan proses inspeksi DPL yang telah disahkan.
 
-**Pengguna utama:** petugas inspeksi simulasi. **Pemilik hasil latihan:** tim developer peserta. **Reviewer:** trainer bersama PIC developer. Tidak ada autentikasi nyata, backend, role supervisor, atau approval pada checkpoint ini.
+**Pengguna utama:** petugas inspeksi simulasi. **Pemilik hasil latihan:** tim developer peserta. **Reviewer:** trainer bersama PIC developer. Tidak ada autentikasi nyata, layanan API, role supervisor, atau approval pada checkpoint ini.
 
 ## User stories
 - Sebagai petugas, saya ingin melihat daftar inspeksi agar mengetahui catatan yang tersedia.

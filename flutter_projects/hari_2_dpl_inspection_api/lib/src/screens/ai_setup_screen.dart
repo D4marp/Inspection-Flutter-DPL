@@ -60,7 +60,7 @@ class AiSetupScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              'Untuk production, panggilan AI dari aplikasi harus melalui backend proxy dengan auth, quota, dan audit.',
+              'Integrasi AI runtime berada di luar scope kelas dan memerlukan arsitektur tepercaya dengan auth, quota, dan audit.',
               style: TextStyle(color: Color(0xffc5d8d5), height: 1.45),
             ),
           ],

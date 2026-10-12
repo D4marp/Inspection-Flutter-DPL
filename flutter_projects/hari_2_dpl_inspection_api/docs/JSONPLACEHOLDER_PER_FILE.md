@@ -330,4 +330,4 @@ fvm flutter build apk --debug
 3. Tambahkan badge `SIMULATED` pada hasil create/update.
 4. Buat fake response 500 dan pastikan cache/retry tampil benar.
 5. Ganti mapper agar resource `/todos` menjadi work order tanpa mengubah UI.
-6. Tulis PRD perubahan dari simulasi ke backend persistence nyata.
+6. Tulis PRD perubahan dari simulasi ke layanan dengan persistence nyata.

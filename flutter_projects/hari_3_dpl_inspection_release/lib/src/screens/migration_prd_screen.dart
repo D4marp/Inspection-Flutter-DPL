@@ -36,7 +36,7 @@ class MigrationPrdScreen extends StatelessWidget {
         icon: Icons.block_outlined,
         title: 'Di luar scope slice',
         body:
-            'Rewrite seluruh aplikasi, perubahan backend, autentikasi baru, JavaScript bridge produksi, dan keputusan arsitektur tanpa bukti dari app Kotlin.',
+            'Rewrite seluruh aplikasi, perubahan kontrak API, autentikasi baru, JavaScript bridge produksi, dan keputusan arsitektur tanpa bukti dari app Kotlin.',
       ),
       const SizedBox(height: 18),
       _Checklist(),

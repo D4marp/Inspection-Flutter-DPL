@@ -1,99 +1,70 @@
-# DPL Inspection Training API
+# Paket Training Flutter DPL — 3 Hari
 
-API Express untuk menguji aplikasi Flutter Hari 2–3. Data disimpan in-memory dan
-akan kembali ke seed awal ketika proses/container restart. Seluruh credential,
-token, dan record adalah data dummy training.
+Paket ini berisi materi, PowerPoint, PDF, dan tiga proyek praktik Flutter untuk
+pelatihan PT. Dok Pantai Lamongan. Fokus kelas tetap pada Flutter dan API publik
+siap pakai, sehingga peserta tidak perlu menyiapkan layanan server sendiri.
 
-## Endpoint penting
+## Isi paket
 
-- Swagger UI: <http://localhost:3100/docs>
-- OpenAPI JSON: <http://localhost:3100/openapi.json>
-- Health: <http://localhost:3100/health>
-- Login: `POST /auth/login`
-- List/create: `GET|POST /inspections`
-- Detail: `GET /inspections/{id}`
-
-Login default: `trainer` / `training123`.
-
-## Menjalankan dengan Docker
-
-```sh
-cd backend/inspection-api
-docker compose up --build -d
-docker compose ps
-curl http://localhost:3100/health
-```
-
-Buka <http://localhost:3100/docs>, jalankan login, tekan **Authorize**, lalu isi
-token `training-demo-token` untuk mencoba endpoint inspection.
-
-Container tetap mendengarkan port `3000`; Compose memublikasikannya ke port
-host `3100` agar tidak bentrok dengan web development server yang umum memakai
-port `3000`. Ubah `API_HOST_PORT` dan `PUBLIC_BASE_URL` bila diperlukan.
-
-Log dan stop:
-
-```sh
-docker compose logs -f inspection-api
-docker compose down
-```
-
-## Menjalankan tanpa Docker
-
-```sh
-npm ci
-npm test
-npm run dev
-```
-
-Node.js 20 atau lebih baru diperlukan. Salin `.env.example` bila ingin
-mengganti konfigurasi; source tidak otomatis membaca file `.env`, sehingga
-export environment atau gunakan `node --env-file=.env src/server.js`.
-Mode tanpa Docker memakai port `3000` sesuai nilai `PORT`.
-
-## Menghubungkan Flutter
-
-iPhone Simulator:
-
-```sh
-fvm flutter run -d "iPhone 16" \
-  --dart-define=API_BASE_URL=http://localhost:3100
-```
-
-Android Emulator:
-
-```sh
-fvm flutter run \
-  --dart-define=API_BASE_URL=http://10.0.2.2:3100
-```
-
-Physical device memakai IP LAN komputer Docker, misalnya
-`http://192.168.1.10:3100`. HTTP hanya untuk debug jaringan training. Release
-harus memakai staging HTTPS.
-
-## Fault simulation
-
-Compose mengaktifkan fault simulation. Gunakan header berikut melalui
-`requests.http` atau Swagger:
-
-| Header | Nilai | Hasil |
+| Hari | Proyek | Fokus |
 |---|---|---|
-| `X-Debug-Fault` | `list-500` | GET list menghasilkan 500 |
-| `X-Debug-Fault` | `create-500` | POST menghasilkan 500 |
-| `X-Debug-Delay-Ms` | `11000` | Delay 11 detik untuk timeout Flutter |
+| 1 | `flutter_projects/hari_1_dpl_inspection` | Dart, UI, form, navigation, dan state lokal |
+| 2 | `flutter_projects/hari_2_dpl_inspection_api` | Simulasi CRUD API, clean code, image picker, file picker, dan OpenCode |
+| 3 | `flutter_projects/hari_3_dpl_inspection_release` | WebView, PRD migrasi Kotlin, Agent Skill, dan quality gate |
 
-Fault header diabaikan ketika `ENABLE_FAULTS=false`.
+Materi presentasi tersedia di root dan folder `PPT_Training`. Versi editable
+dan PDF berada di `materi_pendamping`.
 
-## Quality checks
+## API latihan Hari 2
 
-```sh
-npm run check
-npm test
-docker compose config
-docker build -t dpl-inspection-training-api:local .
+Hari 2 memakai API publik gratis JSONPlaceholder:
+
+```text
+https://jsonplaceholder.typicode.com/posts
 ```
 
-API mempunyai request ID, log JSON tanpa Authorization/body, validasi field,
-error response konsisten, pagination/search/filter, dan `Idempotency-Key` untuk
-mendemonstrasikan retry POST yang aman. Ini tetap API training, bukan backend
-production atau tempat menyimpan data operasional.
+Tidak ada akun, API key, atau server lokal yang perlu disiapkan. GET
+mengambil data publik. POST, PUT, dan DELETE mengembalikan respons simulasi,
+tetapi tidak menyimpan perubahan secara permanen. Aplikasi menampilkan batas
+ini secara eksplisit agar peserta memahami perbedaan respons sukses dan
+persistence.
+
+Tutorial implementasi per file:
+
+```text
+flutter_projects/hari_2_dpl_inspection_api/
+  docs/JSONPLACEHOLDER_PER_FILE.md
+```
+
+## WebView Hari 3
+
+Contoh WebView membuka:
+
+```text
+https://www.presisirencar.com/
+```
+
+Navigasi dibatasi ke HTTPS dan host `presisirencar.com`/
+`www.presisirencar.com`. Tautan eksternal diblokir. JavaScript aktif untuk
+interaksi situs, tanpa JavaScript bridge ke Flutter.
+
+## Menjalankan proyek
+
+Contoh untuk Hari 2:
+
+```sh
+cd flutter_projects/hari_2_dpl_inspection_api
+fvm flutter pub get
+fvm flutter analyze
+fvm flutter test
+fvm flutter run
+```
+
+Gunakan langkah yang sama pada folder Hari 1 atau Hari 3. Setiap proyek
+memiliki `.fvmrc`, `pubspec.lock`, README, dan test masing-masing.
+
+## Keamanan
+
+Jangan commit API key, token, `.env`, keystore, atau data operasional. API key
+AI dipakai oleh tool developer melalui mekanisme login/provider, bukan ditanam
+di source Flutter atau APK.

@@ -91,8 +91,9 @@ fvm flutter run -d "iPhone 16"
 ```
 
 App Migration Lab mempunyai tab PRD, WebView, target Flutter, dan Agent Skill.
-WebView membuka asset lokal dengan JavaScript mati dan external navigation
-diblokir. Skill proyek berada di
+WebView membuka `https://www.presisirencar.com/` dengan exact-host HTTPS
+allowlist. Tautan eksternal diblokir dan JavaScript aktif tanpa JavaScript
+bridge. Skill proyek berada di
 `.agents/skills/migrate-kotlin-slice/SKILL.md`; foto lokal tetap tersedia pada
 target detail sebagai contoh native plugin/lifecycle.
 

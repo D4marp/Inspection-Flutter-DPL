@@ -148,7 +148,7 @@ opencode
 
 Di TUI gunakan `/connect` dan `/models`. API key adalah credential developer
 tool, bukan secret yang ditaruh di Flutter. Fitur AI produksi harus memakai
-backend organisasi untuk policy, quota, redaction, audit, dan rotasi key.
+layanan tepercaya organisasi untuk policy, quota, redaction, audit, dan rotasi key.
 
 ## Challenge kelas
 
@@ -157,7 +157,7 @@ backend organisasi untuk policy, quota, redaction, audit, dan rotasi key.
 3. Tambahkan badge `SIMULATED` untuk hasil write.
 4. Fake response 500 dan buktikan cache/retry.
 5. Ganti mapper `/posts` menjadi `/todos` tanpa mengubah UI.
-6. Tulis PRD migrasi dari simulasi ke backend persistent.
+6. Tulis PRD migrasi dari simulasi ke layanan persistent.
 
 ## Quality gate
 

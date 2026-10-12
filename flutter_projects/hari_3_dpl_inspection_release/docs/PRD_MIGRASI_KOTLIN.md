@@ -40,7 +40,7 @@ detail, kembali ke daftar yang sama, dan melihat loading/empty/error secara jela
 
 ## Out of scope
 
-Rewrite seluruh aplikasi, perubahan schema backend, autentikasi baru, JavaScript
+Rewrite seluruh aplikasi, perubahan schema API, autentikasi baru, JavaScript
 bridge produksi, upload foto, dan distribusi store.
 
 ## Definition of done

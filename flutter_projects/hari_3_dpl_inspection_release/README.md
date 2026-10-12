@@ -82,5 +82,5 @@ dan [docs/PRD_MIGRASI_KOTLIN.md](docs/PRD_MIGRASI_KOTLIN.md).
 
 Foto hanya preview lokal. WebView bukan bridge produksi. Source legacy Kotlin
 tidak disertakan sehingga peserta memakai contoh/fixture yang diberikan trainer.
-Build release, signing, dan deployment backend tetap menjadi quality gate
+Build release, signing, dan deployment production tetap menjadi quality gate
 terpisah.

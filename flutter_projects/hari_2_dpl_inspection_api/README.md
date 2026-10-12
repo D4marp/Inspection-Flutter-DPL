@@ -2,7 +2,7 @@
 
 Proyek Flutter Hari 2 memakai API publik open-source
 [JSONPlaceholder](https://jsonplaceholder.typicode.com) sehingga peserta dapat
-langsung menjalankan latihan tanpa membuat akun, API key, Docker, atau server
+langsung menjalankan latihan tanpa membuat akun, API key, atau server
 lokal.
 
 ## Area latihan
@@ -92,6 +92,5 @@ fvm flutter test
 fvm flutter build apk --debug
 ```
 
-Backend Express dalam paket tetap tersedia sebagai materi lanjutan untuk real
-in-memory persistence, authentication, Swagger, dan fault simulation. Backend
-tersebut bukan jalur utama Hari 2 setelah perpindahan ke JSONPlaceholder.
+Seluruh demo network Hari 2 memakai JSONPlaceholder agar kelas dapat langsung
+berjalan tanpa deployment tambahan.

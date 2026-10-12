@@ -112,7 +112,7 @@ def build(background: Path) -> Path:
     s = d.base_slide(prs, "SLICE", "Vertical slice menjaga migrasi tetap selesai", n, TOTAL, 3)
     d.add_flow(s, ["List trigger", "GET contract", "List state", "Detail route", "Parity evidence"], Inches(0.62), Inches(1.45), Inches(12.08), descriptions=["entry", "unchanged", "all states", "stable ID", "AC + test"])
     d.add_card(s, Inches(0.62), Inches(3.62), Inches(5.85), Inches(2.52), "Masuk slice", ["One user outcome", "UI + state + data", "Failure path", "Reviewable diff"], icon="IN", accent=d.CYAN, body_size=13)
-    d.add_card(s, Inches(6.82), Inches(3.62), Inches(5.88), Inches(2.52), "Di luar slice", ["All screens", "Backend rewrite", "New auth", "Broad refactor"], icon="OUT", accent=d.RED, body_size=13)
+    d.add_card(s, Inches(6.82), Inches(3.62), Inches(5.88), Inches(2.52), "Di luar slice", ["All screens", "API contract rewrite", "New auth", "Broad refactor"], icon="OUT", accent=d.RED, body_size=13)
     notes(s, "09.40–09.50", 10, "Memotong scope.", "Pilih list→detail sebagai slice kelas.", "Apa dependency minimum slice?", "PRD slice.")
     n += 1
 

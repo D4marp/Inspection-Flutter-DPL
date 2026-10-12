@@ -3,8 +3,8 @@
 
 The generated presentations intentionally stay aligned with the written modules:
 Day 2 covers Flutter architecture/API/state/storage and Day 3 covers native
-integration/testing/performance/release. Backend implementation and deployment
-are prerequisites supplied by the trainer, not classroom topics.
+integration/testing/performance/release. Custom server implementation and
+deployment are intentionally excluded.
 """
 
 from __future__ import annotations
@@ -575,7 +575,7 @@ def build_day2(background: Path):
         background,
         total,
     )
-    add_notes(s, "Pembukaan", 3, "Menyepakati target teknis Hari 2.", "Tegaskan bahwa backend sudah disiapkan. Waktu kelas dipakai untuk implementasi Flutter dan pembuktian perilakunya.", "Apa risiko terbesar ketika UI langsung bergantung pada detail HTTP?", "Modul Hari 2 dan PRD Hari 2.")
+    add_notes(s, "Pembukaan", 3, "Menyepakati target teknis Hari 2.", "Tegaskan bahwa JSONPlaceholder siap dipakai. Waktu kelas dipakai untuk implementasi Flutter dan pembuktian perilakunya.", "Apa risiko terbesar ketika UI langsung bergantung pada detail HTTP?", "Modul Hari 2 dan PRD Hari 2.")
     n += 1
 
     s = add_outcome_slide(
@@ -668,7 +668,7 @@ def build_day2(background: Path):
     n += 1
 
     s = add_section_slide(prs, 2, n, total, "02", "REST API di Flutter", "Flutter membaca kontrak, memetakan JSON, dan mengubah response menjadi state yang dapat diuji.", ["Membuat API client", "Memilih environment", "Memetakan failure"])
-    add_notes(s, "10.15–10.17", 2, "Membuka sesi API Flutter.", "Endpoint dan backend sudah siap. Mulai dari response contract lalu implementasikan ApiClient.", "Bagaimana mencegah detail HTTP bocor ke widget?", "PRD Hari 2: kontrak API.")
+    add_notes(s, "10.15–10.17", 2, "Membuka sesi API Flutter.", "Endpoint publik sudah siap. Mulai dari response contract lalu implementasikan ApiClient.", "Bagaimana mencegah detail HTTP bocor ke widget?", "PRD Hari 2: kontrak API.")
     n += 1
 
     s = base_slide(prs, "API CLIENT", "Aliran integrasi API dari sisi Flutter", n, total, 2)
@@ -687,8 +687,8 @@ def build_day2(background: Path):
         if x < Inches(10.5):
             add_connector(s, x + Inches(1.86), Inches(2.46), x + Inches(2.45), Inches(2.46), color=CYAN, width=2)
     add_card(s, Inches(0.66), Inches(4.10), Inches(5.78), Inches(2.26), "Fokus peserta Flutter", ["Mapping JSON ke model", "State dan recovery UI", "Lifecycle serta testability"], icon="1", accent=CYAN, body_size=14)
-    add_card(s, Inches(6.78), Inches(4.10), Inches(5.78), Inches(2.26), "Sudah disiapkan trainer", ["Base URL dan akun dummy", "Kontrak/status response", "Backend serta deployment"], icon="2", accent=GOLD, body_size=14)
-    add_notes(s, "10.17–10.30", 13, "Menjelaskan aliran integrasi Flutter.", "Trace aksi user sampai ApiClient dan kembali sebagai UI state. Backend/deployment cukup disebut sebagai prasyarat.", "Layer mana yang memutuskan cache fallback?", "Modul Hari 2: data flow.")
+    add_card(s, Inches(6.78), Inches(4.10), Inches(5.78), Inches(2.26), "Sudah siap dipakai", ["Base URL publik", "Kontrak/status response", "Tanpa akun/deployment"], icon="2", accent=GOLD, body_size=14)
+    add_notes(s, "10.17–10.30", 13, "Menjelaskan aliran integrasi Flutter.", "Trace aksi user sampai ApiClient dan kembali sebagai UI state. Tekankan batas simulated write.", "Layer mana yang memutuskan cache fallback?", "Modul Hari 2: data flow.")
     n += 1
 
     s = base_slide(prs, "API CLIENT", "Membaca kontrak sebagai Flutter developer", n, total, 2)
@@ -747,14 +747,14 @@ def build_day2(background: Path):
     s = base_slide(prs, "API CONTRACT", "Session flow yang aman", n, total, 2)
     add_flow(s, ["Login", "Validate", "Store token", "Authorize", "Expire / logout"], Inches(0.62), Inches(1.42), Inches(12.08), descriptions=["credential → HTTPS", "200 + schema", "secure storage", "Bearer per request", "clear token + cache"])
     add_card(s, Inches(0.62), Inches(3.50), Inches(5.84), Inches(2.70), "Security baseline", ["Tidak mencetak token/password", "TLS untuk hosted API", "Token disimpan via secure storage", "401 mengakhiri session"], icon="S", accent=CYAN, body_size=13)
-    add_card(s, Inches(6.82), Inches(3.50), Inches(5.88), Inches(2.70), "Bukan scope training", ["Refresh token rotation", "SSO/OAuth production", "Certificate pinning", "Audit keamanan backend"], icon="→", accent=GOLD, body_size=13)
+    add_card(s, Inches(6.82), Inches(3.50), Inches(5.88), Inches(2.70), "Bukan scope training", ["Refresh token rotation", "SSO/OAuth production", "Certificate pinning", "Audit layanan production"], icon="→", accent=GOLD, body_size=13)
     add_notes(s, "11.32–11.43", 11, "Menjelaskan lifecycle session.", "Tunjukkan token sebagai detail platform, bukan state yang disebar ke widget.", "Data apa saja yang harus dibersihkan saat logout?", "Modul Hari 2: secure storage/logout.")
     n += 1
 
     s = base_slide(prs, "API CONTRACT", "POST, timeout, dan idempotency", n, total, 2)
     add_card(s, Inches(0.65), Inches(1.30), Inches(3.62), Inches(4.90), "Fakta", ["Timeout hanya berarti client berhenti menunggu", "Server mungkin sudah membuat record", "Retry dapat menggandakan data"], icon="1", accent=RED, body_size=14)
     add_card(s, Inches(4.52), Inches(1.30), Inches(3.62), Inches(4.90), "Client", ["Disable submit saat request", "Buat request ID stabil", "Jangan auto-retry POST tanpa policy"], icon="2", accent=CYAN, body_size=14)
-    add_card(s, Inches(8.39), Inches(1.30), Inches(3.62), Inches(4.90), "Backend", ["Terima Idempotency-Key", "Kembalikan hasil request yang sama", "409 bila aturan bisnis konflik"], icon="3", accent=GOLD, body_size=14)
+    add_card(s, Inches(8.39), Inches(1.30), Inches(3.62), Inches(4.90), "API contract", ["Terima Idempotency-Key", "Kembalikan hasil request yang sama", "409 bila aturan bisnis konflik"], icon="3", accent=GOLD, body_size=14)
     add_box(s, Inches(1.65), Inches(6.38), Inches(10.05), Inches(0.42), NAVY, None)
     add_text(s, "Kelas inti: submit guard. Pengayaan profesional: idempotency end-to-end.", Inches(1.75), Inches(6.51), Inches(9.85), Inches(0.18), size=12, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
     add_notes(s, "11.43–11.55", 12, "Membahas ketidakpastian POST timeout.", "Simulasikan delay dan minta peserta menjelaskan kemungkinan state server.", "Kapan retry POST aman?", "Modul Hari 2: timeout dan duplikasi POST.")
@@ -863,7 +863,7 @@ def build_day2(background: Path):
     add_card(s, Inches(0.62), Inches(1.28), Inches(3.78), Inches(4.98), "Log", ["method + path", "status + duration", "request ID", "failure type", "environment/version"], icon="L", accent=CYAN, body_size=14)
     add_card(s, Inches(4.78), Inches(1.28), Inches(3.78), Inches(4.98), "Redact", ["Authorization", "password", "token", "PII/body sensitif", "keystore path/password"], icon="×", accent=RED, body_size=14)
     add_card(s, Inches(8.94), Inches(1.28), Inches(3.78), Inches(4.98), "Correlate", ["X-Request-Id", "request → response", "app version", "timestamp UTC", "user-safe error ID"], icon="ID", accent=GOLD, body_size=14)
-    add_text(s, "Debugging menjadi kolaborasi client–backend, bukan tebak-tebakan screenshot.", Inches(1.23), Inches(6.56), Inches(10.85), Inches(0.25), size=14, color=BLUE, bold=True, align=PP_ALIGN.CENTER)
+    add_text(s, "Debugging mengikuti request–response, bukan tebak-tebakan screenshot.", Inches(1.23), Inches(6.56), Inches(10.85), Inches(0.25), size=14, color=BLUE, bold=True, align=PP_ALIGN.CENTER)
     add_notes(s, "15.02–15.15", 13, "Menetapkan logging Flutter yang aman dan berguna.", "Tunjukkan method, path, status, duration, dan request ID tanpa Authorization/body sensitif.", "Data apa yang tidak boleh masuk log?", "Security baseline materi Hari 2.")
     n += 1
 
@@ -914,7 +914,7 @@ def build_day2(background: Path):
     add_card(s, Inches(4.78), Inches(1.28), Inches(3.78), Inches(5.06), "Implementation", ["Model/DTO bertipe", "ApiClient fokus transport", "Repository memilih source", "Controller memiliki state", "UI hanya render/intent", "Lifecycle ditutup"], icon="FL", accent=CYAN, body_size=13)
     add_card(s, Inches(8.94), Inches(1.28), Inches(3.78), Inches(5.06), "Evidence", ["Test parser/state", "GET/POST berhasil", "401/422 dipetakan", "Offline/cache jelas", "Request ID tanpa token", "README dapat diikuti"], icon="✓", accent=GREEN, body_size=13)
     add_text(s, "Review berpusat pada kualitas implementasi Flutter.", Inches(2.10), Inches(6.58), Inches(9.10), Inches(0.25), size=14, color=BLUE, bold=True, align=PP_ALIGN.CENTER)
-    add_notes(s, "16.10–16.20", 10, "Melakukan review integrasi Flutter.", "Gunakan checklist untuk source review dan demo. Detail deployment backend tidak dibahas.", "Boundary mana masih bocor?", "Modul dan PRD Hari 2.")
+    add_notes(s, "16.10–16.20", 10, "Melakukan review integrasi Flutter.", "Gunakan checklist untuk source review dan demo. Deployment layanan tidak dibahas.", "Boundary mana masih bocor?", "Modul dan PRD Hari 2.")
     n += 1
 
     s = base_slide(prs, "CHECKPOINT", "Evaluasi: jelaskan keputusan, bukan hafalan", n, total, 2)
@@ -1139,7 +1139,7 @@ def build_day3(background: Path):
         ["Seluruh layar rebuild", "listener scope", "narrow observer"],
         ["Jank pertama buka", "shader/image decode", "warmup/size evidence"],
     ], Inches(0.58), Inches(1.24), Inches(12.16), Inches(5.28), widths=[Inches(3.35), Inches(3.88), Inches(4.93)], font_size=12)
-    add_text(s, "Pisahkan latency backend dari work pada UI thread.", Inches(2.50), Inches(6.60), Inches(8.30), Inches(0.25), size=14, color=BLUE, bold=True, align=PP_ALIGN.CENTER)
+    add_text(s, "Pisahkan latency jaringan dari work pada UI thread.", Inches(2.50), Inches(6.60), Inches(8.30), Inches(0.25), size=14, color=BLUE, bold=True, align=PP_ALIGN.CENTER)
     add_notes(s, "13.15–13.28", 13, "Menghubungkan symptom ke tool dan perbaikan.", "Buka DevTools view yang relevan, jangan semua sekaligus.", "Bagaimana membedakan server lambat dari render lambat?", "DevTools docs.")
     n += 1
 
