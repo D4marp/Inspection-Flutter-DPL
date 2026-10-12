@@ -63,6 +63,20 @@ fvm flutter run
 Gunakan langkah yang sama pada folder Hari 1 atau Hari 3. Setiap proyek
 memiliki `.fvmrc`, `pubspec.lock`, README, dan test masing-masing.
 
+## Push repository
+
+Script `push-to-repos.sh` di root menyinkronkan tiga repository: repo utama
+(paket dan Hari 1), Hari 2, dan Hari 3. Backend tidak termasuk:
+
+```sh
+./push-to-repos.sh
+```
+
+Pilih target `main`, `day2`, atau `day3` untuk push satu repository, misalnya
+`./push-to-repos.sh day2`. Pastikan perubahan repo utama sudah di-commit;
+script tidak melakukan force-push dan menolak berjalan saat worktree repo utama
+masih memiliki perubahan lokal.
+
 ## Keamanan
 
 Jangan commit API key, token, `.env`, keystore, atau data operasional. API key
