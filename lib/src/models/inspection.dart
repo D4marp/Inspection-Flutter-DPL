@@ -5,7 +5,6 @@ extension InspectionConditionX on InspectionCondition {
     InspectionCondition.good => 'good',
     InspectionCondition.needsAction => 'needs_action',
   };
-
   String get label => switch (this) {
     InspectionCondition.good => 'Baik',
     InspectionCondition.needsAction => 'Perlu tindak lanjut',
@@ -51,6 +50,14 @@ List<Inspection> demoInspections() => [
     id: 'seed-3',
     assetCode: 'GEN-003',
     location: 'Gudang Peralatan',
+    condition: InspectionCondition.good,
+    note: 'Pemeriksaan rutin selesai.',
+    createdAt: DateTime.utc(2026, 10, 3, 1, 10),
+  ),
+   Inspection(
+    id: 'data 4',
+    assetCode: 'GEN-Z',
+    location: 'Gudang Peralatan Kpal',
     condition: InspectionCondition.good,
     note: 'Pemeriksaan rutin selesai.',
     createdAt: DateTime.utc(2026, 10, 3, 1, 10),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../gen/assets.gen.dart';
 import '../models/inspection.dart';
 import '../widgets/status_badge.dart';
 import 'inspection_detail_screen.dart';
@@ -55,7 +56,11 @@ class _InspectionListScreenState extends State<InspectionListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('DPL Inspection'),
+        leading: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Assets.logo.logoDpl.image(fit: BoxFit.fill),
+        ),
+        title: const Text('Dok Pantai Lamongan'),
         actions: [
           PopupMenuButton<String>(
             enabled: !_loading,
