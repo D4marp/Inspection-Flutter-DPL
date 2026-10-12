@@ -150,13 +150,12 @@ empat file tidak menduplikasi parsing error.
 
 ## 5. `lib/src/data/api_client.dart` — facade yang mudah dipanggil
 
-Base URL default:
+Endpoint dibaca dari ENV (`env/dev.json` → `lib/src/config/env.dart`) lalu
+dirakit oleh `lib/src/config/api_endpoints.dart`. Empat operasi CRUD hanya
+memakai `endpoints.list`, `endpoints.collection`, dan `endpoints.item(id)`.
 
-```dart
-const apiBaseUrl = String.fromEnvironment(
-  'API_BASE_URL',
-  defaultValue: 'https://jsonplaceholder.typicode.com',
-);
+```sh
+fvm flutter run -d "iPhone 16" --dart-define-from-file=env/dev.json
 ```
 
 ```dart

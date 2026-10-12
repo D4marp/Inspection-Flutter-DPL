@@ -27,7 +27,7 @@ scope buku pendamping.
 
 ## Format
 
-- 16:9, 39 slide per deck.
+- 16:9, 41 slide per deck.
 - Tema navy–cyan–gold mengikuti cover buku.
 - Layout, header, footer, card, dan code panel memakai komponen desain deck lama.
 - Snippet dipangkas menjadi satu konsep per slide dengan label nama file.

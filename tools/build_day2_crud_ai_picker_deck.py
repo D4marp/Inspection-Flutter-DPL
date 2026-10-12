@@ -15,7 +15,7 @@ import build_professional_decks as d
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TOTAL = 39
+TOTAL = 41
 
 
 def notes(slide, session, minutes, objective, delivery, question, reference):
@@ -145,33 +145,33 @@ def build(background: Path) -> Path:
     s = d.base_slide(prs, "STRUCTURE", "Empat operasi, empat file yang bisa dibedah", n, TOTAL, 2)
     d.add_code(s, "lib/src/data/crud/\n\n├── read_inspections.dart\n├── create_inspection.dart\n├── update_inspection.dart\n└── delete_inspection.dart\n\napi_client.dart  // facade", Inches(0.60), Inches(1.25), Inches(6.25), Inches(5.48), label="SOURCE TREE", highlight="ONE INTENT • ONE FILE", size=14)
     d.add_card(s, Inches(7.18), Inches(1.25), Inches(5.53), Inches(2.42), "Urutan bedah", ["1  Read + mapper", "2  Create + payload", "3  Update + stable ID", "4  Delete + confirmation"], icon="4", accent=d.CYAN, body_size=13)
-    d.add_card(s, Inches(7.18), Inches(3.95), Inches(5.53), Inches(2.78), "Shared helper", ["ApiException", "JsonResponseDecoder", "10-second timeout", "MockClient seam"], icon="S", accent=d.GOLD, body_size=13)
+    d.add_card(s, Inches(7.18), Inches(3.95), Inches(5.53), Inches(2.78), "Shared helper", ["ApiException", "JsonResponseDecoder", "Timeout dari ENV", "MockClient seam"], icon="S", accent=d.GOLD, body_size=13)
     notes(s, "11.43–11.55", 12, "Mengenalkan struktur CRUD modular.", "Buka empat file secara berurutan; jangan tampilkan seluruh project sekaligus.", "Apa yang layak menjadi helper bersama?", "data/crud + per-file tutorial.")
     n += 1
 
     s = d.base_slide(prs, "READ", "01 • ReadInspections — GET dan mapping", n, TOTAL, 2)
-    d.add_code(s, "Future<List<Inspection>> call() async {\n  final response = await client.get(\n    Uri.parse(\n      '$baseUrl/posts?_limit=20',\n    ),\n  );\n  final posts = JsonResponseDecoder.list(\n    response, expectedStatus: 200,\n  );\n  return posts\n      .map(JsonPlaceholderMapper.fromPost)\n      .toList();\n}", Inches(0.60), Inches(1.20), Inches(7.15), Inches(5.58), label="read_inspections.dart", highlight="GET → LIST → DOMAIN", size=12.4)
+    d.add_code(s, "Future<List<Inspection>> call() async {\n  final response = await client\n      .get(endpoints.list)\n      .timeout(endpoints.timeout);\n  final posts = JsonResponseDecoder.list(\n    response, expectedStatus: 200,\n  );\n  return posts\n      .map(JsonPlaceholderMapper.fromPost)\n      .toList();\n}", Inches(0.60), Inches(1.20), Inches(7.15), Inches(5.58), label="read_inspections.dart", highlight="GET → LIST → DOMAIN", size=12.4)
     d.add_card(s, Inches(8.05), Inches(1.25), Inches(4.66), Inches(2.42), "Bedah 3 titik", ["URL + query", "Expected 200", "Post → Inspection"], icon="R", accent=d.CYAN, body_size=13)
     d.add_card(s, Inches(8.05), Inches(3.95), Inches(4.66), Inches(2.78), "Failure", ["Timeout di boundary", "Invalid JSON typed", "Repository boleh fallback cache"], icon="!", accent=d.RED, body_size=13)
     notes(s, "11.55–12.08", 13, "Membedah operasi Read.", "Buka hanya read_inspections.dart, lalu jalankan test GET.", "Failure mana boleh memakai cache?", "data/crud/read_inspections.dart.")
     n += 1
 
     s = d.base_slide(prs, "CREATE", "02 • CreateInspection — POST dan payload", n, TOTAL, 2)
-    d.add_code(s, "Future<Inspection> call(fields) async {\n  final response = await client.post(\n    Uri.parse('$baseUrl/posts'),\n    headers: const {\n      'Content-Type': 'application/json',\n    },\n    body: jsonEncode(\n      JsonPlaceholderMapper.toPost(fields),\n    ),\n  );\n  final post = JsonResponseDecoder.object(\n    response, expectedStatus: 201,\n  );\n  return JsonPlaceholderMapper.fromPost(post);\n}", Inches(0.60), Inches(1.18), Inches(7.15), Inches(5.60), label="create_inspection.dart", highlight="POST → 201 • SIMULATED", size=11.7)
+    d.add_code(s, "Future<Inspection> call(fields) async {\n  final response = await client.post(\n    endpoints.collection,\n    headers: const {\n      'Content-Type': 'application/json',\n    },\n    body: jsonEncode(\n      JsonPlaceholderMapper.toPost(fields),\n    ),\n  );\n  final post = JsonResponseDecoder.object(\n    response, expectedStatus: 201,\n  );\n  return JsonPlaceholderMapper.fromPost(post);\n}", Inches(0.60), Inches(1.18), Inches(7.15), Inches(5.60), label="create_inspection.dart", highlight="POST → 201 • SIMULATED", size=11.7)
     d.add_card(s, Inches(7.62), Inches(1.25), Inches(5.09), Inches(2.42), "Before request", ["Form valid", "No double submit", "JSON contract exact"], icon="B", accent=d.CYAN, body_size=13)
     d.add_card(s, Inches(7.62), Inches(3.95), Inches(5.09), Inches(2.78), "After request", ["Map response", "Insert local state", "Show SIMULATED", "Reset removes it"], icon="A", accent=d.GOLD, body_size=13)
     notes(s, "13.00–13.13", 13, "Membedah operasi Create.", "Buka create_inspection.dart, inspect payload, lalu refresh untuk membuktikan simulasi.", "Apa evidence persistence nyata?", "data/crud/create_inspection.dart.")
     n += 1
 
     s = d.base_slide(prs, "UPDATE", "03 • UpdateInspection — PUT dengan stable ID", n, TOTAL, 2)
-    d.add_code(s, "Future<Inspection> call(\n  String id, Map<String, dynamic> fields,\n) async {\n  final response = await client.put(\n    Uri.parse('$baseUrl/posts/$id'),\n    headers: const {\n      'Content-Type': 'application/json',\n    },\n    body: jsonEncode(\n      JsonPlaceholderMapper.toPost(fields, id: id),\n    ),\n  );\n  final post = JsonResponseDecoder.object(\n    response, expectedStatus: 200,\n  );\n  return JsonPlaceholderMapper.fromPost(post);\n}", Inches(0.60), Inches(1.12), Inches(7.15), Inches(5.66), label="update_inspection.dart", highlight="PATH ID = PAYLOAD ID", size=10.9)
+    d.add_code(s, "Future<Inspection> call(\n  String id, Map<String, dynamic> fields,\n) async {\n  final response = await client.put(\n    endpoints.item(id),\n    headers: const {\n      'Content-Type': 'application/json',\n    },\n    body: jsonEncode(\n      JsonPlaceholderMapper.toPost(fields, id: id),\n    ),\n  );\n  final post = JsonResponseDecoder.object(\n    response, expectedStatus: 200,\n  );\n  return JsonPlaceholderMapper.fromPost(post);\n}", Inches(0.60), Inches(1.12), Inches(7.15), Inches(5.66), label="update_inspection.dart", highlight="PATH ID = PAYLOAD ID", size=10.9)
     d.add_card(s, Inches(8.05), Inches(1.25), Inches(4.66), Inches(2.42), "Before PUT", ["Prefill form", "Validate full body", "Keep stable ID"], icon="B", accent=d.CYAN, body_size=13)
     d.add_card(s, Inches(8.05), Inches(3.95), Inches(4.66), Inches(2.78), "After 200", ["Map server result", "Replace same ID", "Preserve list order"], icon="A", accent=d.GOLD, body_size=13)
     notes(s, "13.13–13.26", 13, "Membedah operasi Update.", "Buka update_inspection.dart dan cocokkan ID path dengan payload.", "Mengapa response server mengganti model lokal?", "data/crud/update_inspection.dart.")
     n += 1
 
     s = d.base_slide(prs, "DELETE", "04 • DeleteInspection — DELETE tanpa model response", n, TOTAL, 2)
-    d.add_code(s, "Future<void> call(String id) async {\n  final response = await client.delete(\n    Uri.parse('$baseUrl/posts/$id'),\n  );\n\n  JsonResponseDecoder.empty(\n    response,\n    expectedStatuses: const {200, 204},\n  );\n}\n\n// Controller removes the local item\n// only after this Future succeeds.", Inches(0.60), Inches(1.25), Inches(7.15), Inches(5.48), label="delete_inspection.dart", highlight="DELETE → 200 / 204", size=12.1)
+    d.add_code(s, "Future<void> call(String id) async {\n  final response = await client.delete(\n    endpoints.item(id),\n  );\n\n  JsonResponseDecoder.empty(\n    response,\n    expectedStatuses: const {200, 204},\n  );\n}\n\n// Controller removes the local item\n// only after this Future succeeds.", Inches(0.60), Inches(1.25), Inches(7.15), Inches(5.48), label="delete_inspection.dart", highlight="DELETE → 200 / 204", size=12.1)
     d.add_card(s, Inches(7.62), Inches(1.25), Inches(5.09), Inches(2.42), "Protect user", ["Name target", "Cancel default", "Disable while request"], icon="P", accent=d.RED, body_size=13)
     d.add_card(s, Inches(7.62), Inches(3.95), Inches(5.09), Inches(2.78), "Handle result", ["200 accepted", "Remove local item", "Banner remains", "Reset restores"], icon="R", accent=d.GREEN, body_size=13)
     notes(s, "13.26–13.39", 13, "Membedah operasi Delete.", "Buka delete_inspection.dart; confirmation tetap concern UI.", "Kapan optimistic delete layak?", "data/crud/delete_inspection.dart.")
@@ -182,6 +182,20 @@ def build(background: Path) -> Path:
     d.add_card(s, Inches(7.18), Inches(1.25), Inches(5.53), Inches(2.42), "Aplikasi memanggil", ["Repository → facade", "Nama intent jelas", "UI tidak tahu HTTP"], icon="A", accent=d.CYAN, body_size=13)
     d.add_card(s, Inches(7.18), Inches(3.95), Inches(5.53), Inches(2.78), "Trainer dapat membuka", ["Satu operation file", "Satu MockClient test", "Satu failure scenario"], icon="T", accent=d.GOLD, body_size=13)
     notes(s, "13.39–13.52", 13, "Menjelaskan facade.", "Bandingkan pemanggilan repository dengan isi empat operation file.", "Mengapa facade tidak menjadi god object?", "api_client.dart + data/crud.")
+    n += 1
+
+    s = d.base_slide(prs, "ENV", "Endpoint di ENV—bukan hardcode di data layer", n, TOTAL, 2)
+    d.add_code(s, "// env/dev.json\n{\n  \"ENV_NAME\": \"dev\",\n  \"API_BASE_URL\": \"https://jsonplaceholder.typicode.com\",\n  \"API_POSTS_PATH\": \"/posts\",\n  \"API_LIST_LIMIT\": \"20\",\n  \"API_TIMEOUT_SECONDS\": \"10\"\n}\n\n// lib/src/config/env.dart\nstatic const apiBaseUrl = String.fromEnvironment(\n  'API_BASE_URL',\n);", Inches(0.60), Inches(1.20), Inches(7.15), Inches(5.58), label="env/dev.json + env.dart", highlight="ONE SOURCE", size=11.2)
+    d.add_card(s, Inches(8.05), Inches(1.25), Inches(4.66), Inches(2.42), "Best practice", ["Satu file per environment", "Tanpa hardcode URL", "dev / prod terpisah"], icon="E", accent=d.CYAN, body_size=13)
+    d.add_card(s, Inches(8.05), Inches(3.95), Inches(4.66), Inches(2.78), "Layering", ["Env: baca nilai", "ApiEndpoints: rakit URL", "CRUD file: pakai endpoints"], icon="L", accent=d.GOLD, body_size=13)
+    notes(s, "13.52–14.00", 8, "Memindahkan endpoint ke environment config.", "Buka env/dev.json, env.dart, lalu api_endpoints.dart; tunjukkan tidak ada URL di folder crud.", "Mengapa ENV membuat ganti server tanpa edit source?", "lib/src/config + env/*.json.")
+    n += 1
+
+    s = d.base_slide(prs, "ENV RUN", "Jalankan per environment di iPhone 16 Simulator", n, TOTAL, 2)
+    d.add_code(s, "# Run di iPhone 16 Simulator\nfvm flutter run -d \"iPhone 16\" \\\n  --dart-define-from-file=env/dev.json\n\n# Build prod\nfvm flutter build apk \\\n  --dart-define-from-file=env/prod.json", Inches(0.60), Inches(1.25), Inches(7.05), Inches(5.48), label="TERMINAL", size=12.5)
+    d.add_card(s, Inches(7.95), Inches(1.25), Inches(4.76), Inches(2.42), "Boleh di ENV", ["Base URL publik", "Path, limit, timeout", "Nama environment"], icon="✓", accent=d.GREEN, body_size=13)
+    d.add_card(s, Inches(7.95), Inches(3.95), Inches(4.76), Inches(2.78), "Bukan di ENV", ["API key / token AI", "Password, signing key", "Nilai compile-time bisa diekstrak dari APK"], icon="!", accent=d.RED, body_size=13)
+    notes(s, "14.00–14.08", 8, "Menjalankan app per environment.", "Jalankan dev.json di iPhone 16, lalu ubah API_LIST_LIMIT dan tunjukkan jumlah data berubah.", "Mengapa dart-define bukan tempat secret?", "env/README.md.")
     n += 1
 
     s = two_cards(prs, n, "SECURITY", "Public API bukan tempat menaruh API key AI", ("JSONPlaceholder", ["No login", "No key", "Public demo data", "HTTPS"], "P", d.CYAN), ("AI provider key", ["Milik tool developer", "Tidak pernah di Flutter", "Quota + rotation", "Redact dari log/prompt"], "K", d.RED), "Endpoint publik dan provider credential mempunyai threat model yang berbeda.")
