@@ -19,8 +19,8 @@ human review gate.
 | 09.15–10.00 | PRD slice | AC → evidence matrix |
 | 10.15–11.15 | Kotlin → Flutter mapping | Architecture map |
 | 11.15–12.00 | Agent Skill | Skill + context pack + prompt |
-| 13.00–14.00 | WebView implementation | Local content + states |
-| 14.00–14.45 | Security boundary | JS off + external block |
+| 13.00–14.00 | WebView implementation | Situs latihan + states |
+| 14.00–14.45 | Security boundary | HTTPS allowlist + external block |
 | 14.45–15.45 | Migration lab | Slice + tests |
 | 15.45–16.30 | Build, parity review, handover | Evidence + gap |
 
@@ -100,16 +100,21 @@ memegang konfigurasi WebView, sedangkan screen hanya merender state.
 ```dart
 static bool allows(String rawUrl) {
   if (rawUrl == 'about:blank') return true;
-  return Uri.tryParse(rawUrl)?.scheme == 'file';
+  final uri = Uri.tryParse(rawUrl);
+  return uri != null &&
+      uri.scheme == 'https' &&
+      {'presisirencar.com', 'www.presisirencar.com'}.contains(uri.host);
 }
 ```
 
-Implementasikan progress, error, reload, dan back behavior. Untuk remote WebView,
-tambahkan allowlist scheme/host, TLS policy, session/logout, deep link, upload/
-download policy, observability, dan threat review. JavaScript bridge harus
-memiliki message schema dan origin check; jangan dibuka hanya agar demo berhasil.
+Controller membuka `https://www.presisirencar.com/`. JavaScript aktif karena
+situs memakai interaksi Next.js, tetapi aplikasi tidak membuat JavaScript
+bridge. Implementasikan progress, error, reload, dan browser back. Allowlist
+harus membandingkan scheme dan host secara exact; jangan memakai `contains` pada
+string URL. Untuk produksi, tambah kebijakan session/logout, deep link, upload/
+download, observability, dan threat review.
 
-Challenge: klik external link pada asset latihan dan buktikan
+Challenge: klik tautan WhatsApp/Google Maps dan buktikan
 `NavigationDelegate` menolak. Ubah satu aturan secara sengaja, tulis test/manual
 evidence yang menangkap regresi, lalu pulihkan. Setelah policy lulus, uji
 controller dan `WebViewWidget` pada emulator/device.

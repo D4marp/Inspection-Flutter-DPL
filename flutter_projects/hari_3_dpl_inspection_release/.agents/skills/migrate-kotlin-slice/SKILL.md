@@ -36,6 +36,6 @@ decision instead of choosing silently.
 
 - Never place API keys, tokens, PII, or production payloads in source, prompts, fixtures, or logs.
 - Do not rewrite unrelated layers or add a dependency without explaining why the slice needs it.
-- Do not enable JavaScript or broaden WebView navigation merely to make a page load.
+- Preserve the PRD WebView boundary: JavaScript may run for the approved training site, but do not add a bridge or broaden the HTTPS host allowlist merely to make a page load.
 - Do not describe a build or test as successful unless its command actually passed.
 - Keep the result understandable without relying on chat history.

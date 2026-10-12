@@ -32,11 +32,11 @@ detail, kembali ke daftar yang sama, dan melihat loading/empty/error secara jela
 
 ## WebView acceptance
 
-- WV1: konten lokal dapat dibuka dan mempunyai loading/error state.
-- WV2: JavaScript default mati untuk konten latihan.
-- WV3: navigasi selain file/about diblokir.
+- WV1: `https://www.presisirencar.com/` dapat dibuka dengan loading/error state.
+- WV2: JavaScript aktif hanya untuk interaksi situs; JavaScript bridge tidak ada.
+- WV3: hanya HTTPS ke `presisirencar.com` dan `www.presisirencar.com` yang diizinkan.
 - WV4: provider API key tidak berada di asset atau bundle aplikasi.
-- WV5: jika scope berubah ke remote origin, allowlist dan threat review wajib.
+- WV5: perubahan origin, scheme, bridge, atau session wajib melalui review PRD.
 
 ## Out of scope
 

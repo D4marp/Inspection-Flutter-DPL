@@ -57,7 +57,7 @@ class AgentSkillScreen extends StatelessWidget {
         icon: Icons.security_outlined,
         title: 'Guardrail',
         body:
-            'Jangan invent contract, jangan kirim secret, jangan perluas JavaScript WebView, dan jangan mengklaim test yang belum dijalankan.',
+            'Jangan invent contract, jangan kirim secret, jangan perluas host/bridge WebView, dan jangan mengklaim test yang belum dijalankan.',
       ),
       const SizedBox(height: 14),
       Card(

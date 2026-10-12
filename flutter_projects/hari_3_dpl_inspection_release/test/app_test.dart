@@ -36,13 +36,30 @@ void main() {
     expect(find.text('Guardrail'), findsOneWidget);
   });
 
-  test('WebView policy allows local content and blocks remote origins', () {
+  test('WebView policy allows only the HTTPS training website', () {
     expect(TrainingNavigationPolicy.allows('about:blank'), isTrue);
     expect(
-      TrainingNavigationPolicy.allows('file:///flutter_assets/guide.html'),
+      TrainingNavigationPolicy.allows('https://www.presisirencar.com/'),
       isTrue,
     );
+    expect(
+      TrainingNavigationPolicy.allows(
+        'https://presisirencar.com/armada?type=mpv#detail',
+      ),
+      isTrue,
+    );
+    expect(
+      TrainingNavigationPolicy.allows('http://presisirencar.com'),
+      isFalse,
+    );
+    expect(TrainingNavigationPolicy.allows('file:///guide.html'), isFalse);
     expect(TrainingNavigationPolicy.allows('https://example.com'), isFalse);
+    expect(
+      TrainingNavigationPolicy.allows(
+        'https://www.presisirencar.com.example.com',
+      ),
+      isFalse,
+    );
     expect(TrainingNavigationPolicy.allows('javascript:alert(1)'), isFalse);
   });
 }

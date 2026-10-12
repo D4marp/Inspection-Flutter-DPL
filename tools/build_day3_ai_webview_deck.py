@@ -62,7 +62,7 @@ def build(background: Path) -> Path:
     s = d.add_outcome_slide(prs, 3, n, TOTAL, "Outcome yang harus dapat dibuktikan", [
         ("Behavior map", ["Legacy evidence", "Unknown list"], "B", d.CYAN),
         ("PRD slice", ["AC + evidence", "Out of scope"], "P", d.BLUE),
-        ("Bounded WebView", ["Local asset", "JS off + block"], "W", d.GOLD),
+        ("Bounded WebView", ["Situs latihan", "HTTPS allowlist"], "W", d.GOLD),
         ("Agent Skill", ["Repeatable flow", "Human gate"], "A", d.GREEN),
     ])
     notes(s, "08.35–08.45", 10, "Menentukan evidence.", "Minta peserta membedakan code, parity, security, dan build evidence.", "Mana yang tetap perlu device test?", "PRD Hari 3.")
@@ -220,7 +220,7 @@ def build(background: Path) -> Path:
     notes(s, "Agent", 13, "Menyiapkan context.", "Sanitasi file sebelum prompt.", "File mana tidak perlu agent lihat?", "AI playbook.")
     n += 1
 
-    s = two_cards(prs, n, "PROMPT", "Prompt mengikat agent ke PRD", ("Berikan", ["Goal satu slice", "Source of truth", "Target files", "Acceptance/evidence", "Commands"], "+", d.GREEN), ("Larangan", ["No invented contract", "No secret", "No broad rewrite", "No JS relaxation", "No fake tests"], "—", d.RED), "Minta plan dan unknown sebelum mengizinkan patch.")
+    s = two_cards(prs, n, "PROMPT", "Prompt mengikat agent ke PRD", ("Berikan", ["Goal satu slice", "Source of truth", "Target files", "Acceptance/evidence", "Commands"], "+", d.GREEN), ("Larangan", ["No invented contract", "No secret", "No broad rewrite", "No host/bridge expansion", "No fake tests"], "—", d.RED), "Minta plan dan unknown sebelum mengizinkan patch.")
     notes(s, "Agent", 13, "Menulis prompt terkontrol.", "Gunakan contoh pada screen Agent Skill.", "Constraint mana mencegah WebView melebar?", "AI playbook.")
     n += 1
 
@@ -235,29 +235,29 @@ def build(background: Path) -> Path:
     notes(s, "Agent", 45, "Memakai skill.", "Trainer mengaudit diff dan klaim test.", "Agent mengarang apa?", "migrate-kotlin-slice skill.")
     n += 1
 
-    s = d.add_section_slide(prs, 3, n, TOTAL, "05", "Bounded WebView", "Gunakan WebView sebagai surface terdefinisi dengan origin, navigation, session, dan security policy.", ["Create controller", "Load local asset", "Block external"])
-    notes(s, "WebView", 2, "Membuka WebView.", "Tegaskan demo local-first dan JS-off.", "Mengapa WebView bukan shortcut migrasi?", "WebView source.")
+    s = d.add_section_slide(prs, 3, n, TOTAL, "05", "Bounded WebView", "Gunakan WebView sebagai surface terdefinisi dengan origin, navigation, session, dan security policy.", ["Create controller", "Load training site", "Block external"])
+    notes(s, "WebView", 2, "Membuka WebView.", "Tegaskan satu situs HTTPS, exact-host allowlist, dan tanpa JS bridge.", "Mengapa WebView bukan shortcut migrasi?", "WebView source.")
     n += 1
 
     s = d.base_slide(prs, "WEBVIEW", "Pisahkan policy, controller, dan screen", n, TOTAL, 3)
-    d.add_code(s, "lib/src/\n├── webview/\n│   ├── navigation_policy.dart\n│   └── migration_webview_controller.dart\n└── screens/\n    └── training_webview_screen.dart\n\nassets/\n└── migration_guide.html", Inches(0.60), Inches(1.25), Inches(6.25), Inches(5.48), label="SOURCE TREE", highlight="POLICY • BEHAVIOR • UI", size=13.2)
+    d.add_code(s, "lib/src/\n├── webview/\n│   ├── navigation_policy.dart\n│   └── migration_webview_controller.dart\n└── screens/\n    └── training_webview_screen.dart\n\nURL:\nhttps://www.presisirencar.com/", Inches(0.60), Inches(1.25), Inches(6.25), Inches(5.48), label="SOURCE TREE", highlight="POLICY • BEHAVIOR • UI", size=13.2)
     d.add_card(s, Inches(7.18), Inches(1.25), Inches(5.53), Inches(2.42), "Bisa diuji cepat", ["Policy: unit test", "Screen: widget state", "Controller: device smoke"], icon="T", accent=d.CYAN, body_size=13)
     d.add_card(s, Inches(7.18), Inches(3.95), Inches(5.53), Inches(2.78), "Ownership jelas", ["Policy memilih URL", "Controller mengatur WebView", "Screen render progress/error"], icon="O", accent=d.GOLD, body_size=13)
     notes(s, "WebView", 15, "Mengenalkan struktur WebView modular.", "Buka tiga file satu per satu, dimulai dari policy yang paling kecil.", "Bagian mana dapat diuji tanpa device?", "lib/src/webview + TrainingWebViewScreen.")
     n += 1
 
-    s = d.base_slide(prs, "CONTROLLER", "Controller: local-first dan JavaScript off", n, TOTAL, 3)
-    d.add_code(s, "return WebViewController()\n  ..setJavaScriptMode(\n    JavaScriptMode.disabled,\n  )\n  ..setNavigationDelegate(\n    NavigationDelegate(\n      onProgress: onProgress,\n      onNavigationRequest: decide,\n      onWebResourceError: handleError,\n    ),\n  )\n  ..loadFlutterAsset(\n    'assets/migration_guide.html',\n  );", Inches(0.60), Inches(1.18), Inches(7.15), Inches(5.60), label="migration_webview_controller.dart", highlight="LOCAL ASSET • JS OFF", size=12.0)
-    d.add_card(s, Inches(8.05), Inches(1.25), Inches(4.66), Inches(2.42), "Reproducible", ["HTML versioned", "No network", "Known content"], icon="L", accent=d.CYAN, body_size=13)
+    s = d.base_slide(prs, "CONTROLLER", "Controller: satu URL, state jelas", n, TOTAL, 3)
+    d.add_code(s, "const trainingWebsiteUrl =\n  'https://www.presisirencar.com/';\n\nreturn WebViewController()\n  ..setJavaScriptMode(\n    JavaScriptMode.unrestricted,\n  )\n  ..setNavigationDelegate(\n    NavigationDelegate(\n      onProgress: onProgress,\n      onNavigationRequest: decide,\n      onWebResourceError: handleError,\n    ),\n  )\n  ..loadRequest(\n    Uri.parse(trainingWebsiteUrl),\n  );", Inches(0.60), Inches(1.18), Inches(7.15), Inches(5.60), label="migration_webview_controller.dart", highlight="ONE URL • NO JS BRIDGE", size=11.3)
+    d.add_card(s, Inches(8.05), Inches(1.25), Inches(4.66), Inches(2.42), "Keputusan", ["HTTPS only", "JS untuk Next.js", "No JS bridge"], icon="L", accent=d.CYAN, body_size=13)
     d.add_card(s, Inches(8.05), Inches(3.95), Inches(4.66), Inches(2.78), "States", ["Progress", "Main-frame error", "Reload", "Blocked URL"], icon="S", accent=d.GOLD, body_size=13)
     notes(s, "WebView", 13, "Membedah controller factory.", "Buka migration_webview_controller.dart lalu cocokkan callback ke screen.", "Apa yang berubah bila URL remote?", "webview_flutter controller API.")
     n += 1
 
-    s = d.base_slide(prs, "POLICY", "Default deny: hanya file dan about:blank", n, TOTAL, 3)
-    d.add_code(s, "abstract final class TrainingNavigationPolicy {\n  static bool allows(String rawUrl) {\n    if (rawUrl == 'about:blank') {\n      return true;\n    }\n\n    final uri = Uri.tryParse(rawUrl);\n    return uri?.scheme == 'file';\n  }\n}\n\n// https:, javascript:, invalid → false", Inches(0.60), Inches(1.25), Inches(7.15), Inches(5.48), label="navigation_policy.dart", highlight="PURE FUNCTION • UNIT TEST", size=12.3)
-    d.add_card(s, Inches(8.05), Inches(1.25), Inches(4.66), Inches(2.42), "Baseline lab", ["file/about only", "External prevent", "No JavaScript bridge"], icon="✓", accent=d.GREEN, body_size=13)
-    d.add_card(s, Inches(8.05), Inches(3.95), Inches(4.66), Inches(2.78), "Jika produksi", ["Exact HTTPS allowlist", "Session/logout policy", "Threat review + tests"], icon="!", accent=d.RED, body_size=13)
-    notes(s, "WebView", 15, "Membedah policy default-deny.", "Jalankan unit test file/about/https/javascript lalu demo external block.", "Risiko apa muncul dari JS bridge?", "navigation_policy.dart + WebView security.")
+    s = d.base_slide(prs, "POLICY", "Default deny: HTTPS + exact host", n, TOTAL, 3)
+    d.add_code(s, "static const allowedHosts = {\n  'presisirencar.com',\n  'www.presisirencar.com',\n};\n\nstatic bool allows(String rawUrl) {\n  if (rawUrl == 'about:blank') return true;\n  final uri = Uri.tryParse(rawUrl);\n  return uri != null &&\n      uri.scheme == 'https' &&\n      allowedHosts.contains(\n        uri.host.toLowerCase(),\n      );\n}\n\n// http, file, javascript, external → false", Inches(0.60), Inches(1.25), Inches(7.15), Inches(5.48), label="navigation_policy.dart", highlight="PURE FUNCTION • UNIT TEST", size=10.8)
+    d.add_card(s, Inches(8.05), Inches(1.25), Inches(4.66), Inches(2.42), "Baseline lab", ["2 exact hosts", "External prevent", "No JavaScript bridge"], icon="✓", accent=d.GREEN, body_size=13)
+    d.add_card(s, Inches(8.05), Inches(3.95), Inches(4.66), Inches(2.78), "Test negatif", ["HTTP", "Fake subdomain", "file/javascript"], icon="!", accent=d.RED, body_size=13)
+    notes(s, "WebView", 15, "Membedah policy default-deny.", "Jalankan unit test untuk dua host, HTTP, fake subdomain, file, dan javascript.", "Mengapa pencocokan string URL berbahaya?", "navigation_policy.dart + WebView security.")
     n += 1
 
     s = three_cards(prs, n, "LIFECYCLE", "Back, session, dan failure harus eksplisit", [
@@ -268,7 +268,7 @@ def build(background: Path) -> Path:
     notes(s, "WebView", 12, "Mendesain lifecycle.", "Diskusikan Android back pada history kosong/berisi.", "Apa yang dibersihkan saat logout?", "WebView PRD.")
     n += 1
 
-    s = lab(prs, n, "Lab 4 — WebView boundary", ["Load local asset", "Show progress/error", "JS tetap off", "Block external URL", "Add reload", "Define back behavior"], ["Asset tampil", "External denied", "No key/bridge"], ["Add host allowlist tests", "Document remote rollout"], "60 MENIT")
+    s = lab(prs, n, "Lab 4 — WebView boundary", ["Load presisirencar.com", "Show progress/error", "Apply HTTPS allowlist", "Block external URL", "Add reload", "Define back behavior"], ["Site tampil", "External denied", "No key/bridge"], ["Test fake subdomain", "Document session policy"], "60 MENIT")
     notes(s, "WebView", 60, "Mengimplementasikan WebView aman.", "Uji pada emulator/device karena platform view.", "Evidence mana manual?", "TrainingWebViewScreen.")
     n += 1
 
@@ -295,12 +295,12 @@ def build(background: Path) -> Path:
     d.add_table(s, ["Menit", "Demo", "Evidence"], [
         ["1", "Behavior map", "facts + unknown"],
         ["2", "PRD traceability", "AC → file/test"],
-        ["2", "WebView", "local + external denied"],
+        ["2", "WebView", "site + external denied"],
         ["1", "Agent Skill", "path + guardrail"],
         ["1", "Target slice", "list/detail parity"],
         ["1", "Gate + gap", "tests/build/next"],
     ], Inches(0.62), Inches(1.35), Inches(12.08), Inches(4.95), widths=[Inches(1.4), Inches(4.3), Inches(6.38)], font_size=13)
-    d.add_text(s, "Core harus lulus sebelum stretch: remote WebView, bridge, atau slice kedua.", Inches(0.9), Inches(6.52), Inches(11.5), Inches(0.28), size=14, color=d.BLUE, bold=True, align=PP_ALIGN.CENTER)
+    d.add_text(s, "Core harus lulus sebelum stretch: session/login, bridge, atau slice kedua.", Inches(0.9), Inches(6.52), Inches(11.5), Inches(0.28), size=14, color=d.BLUE, bold=True, align=PP_ALIGN.CENTER)
     notes(s, "Demo", 30, "Menilai hasil Hari 3.", "Gunakan rubrik dan minta satu risiko yang belum selesai.", "Apakah parity terbukti?", "Day3 rubric.")
     n += 1
 

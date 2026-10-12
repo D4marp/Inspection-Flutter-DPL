@@ -65,8 +65,8 @@ perbaikan berdasar review.
 | 09.15–10.00 | PRD vertical slice dan traceability | AC → evidence matrix |
 | 10.15–11.15 | Mapping Activity/XML/ViewModel/Retrofit | Kotlin → Flutter architecture map |
 | 11.15–12.00 | Agent Skill `migrate-kotlin-slice` | Context pack + safe prompt |
-| 13.00–14.00 | WebView controller/widget | Local content + loading/error/back |
-| 14.00–14.45 | WebView security | JS off, allowlist, external block |
+| 13.00–14.00 | WebView controller/widget | presisirencar.com + loading/error/back |
+| 14.00–14.45 | WebView security | HTTPS exact-host allowlist + external block |
 | 14.45–15.45 | Migration lab | Implement satu slice + tests |
 | 15.45–16.15 | Analyze/test/build dan parity review | Evidence, gap, next slice |
 | 16.15–16.30 | Handover | PRD, skill, release notes |

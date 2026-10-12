@@ -66,5 +66,7 @@ lib/src/screens/training_webview_screen.dart
 ```
 
 Agent tidak boleh melonggarkan `TrainingNavigationPolicy` hanya untuk membuat
-demo berhasil. Perubahan origin, JavaScript, session, bridge, atau upload harus
-kembali ke PRD dan mendapat review manusia.
+demo berhasil. Baseline hanya HTTPS ke `presisirencar.com` dan
+`www.presisirencar.com`; JavaScript aktif tanpa bridge. Perubahan origin,
+scheme, session, bridge, atau upload harus kembali ke PRD dan mendapat review
+manusia.

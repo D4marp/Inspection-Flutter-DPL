@@ -254,6 +254,36 @@ final result = initialItem == null
 Image/file picker hanya mengubah state lokal. File tidak dimasukkan ke body
 JSONPlaceholder dan UI menampilkan label “belum di-upload”.
 
+Contoh `image_picker` untuk galeri:
+
+```dart
+final selected = await ImagePicker().pickImage(
+  source: ImageSource.gallery,
+  maxWidth: 1600,
+  imageQuality: 82,
+);
+if (!mounted || selected == null) return;
+setState(() {
+  _image = selected;
+  _file = null;
+});
+```
+
+Contoh `file_picker` untuk dokumen umum:
+
+```dart
+final selected = await FilePicker.pickFile();
+if (!mounted || selected == null) return;
+setState(() {
+  _file = selected;
+  _image = null;
+});
+```
+
+Kedua contoh menangani cancel sebagai kondisi normal. `XFile` cocok untuk
+preview gambar, sedangkan `PlatformFile` menyediakan nama dan metadata file.
+Pemilihan file bukan upload; multipart upload sengaja berada di luar scope.
+
 ## 11. `test/json_placeholder_api_test.dart` — contract adapter test
 
 Test memakai `MockClient` untuk membuktikan:

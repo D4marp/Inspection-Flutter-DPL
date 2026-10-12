@@ -45,9 +45,9 @@ atau saran agent tidak boleh sendiri dianggap sebagai contract.
 |---|---|
 | WV-01 | Controller dibuat terpisah dari `WebViewWidget` |
 | WV-02 | Loading, error, reload, dan back behavior terlihat |
-| WV-03 | Konten latihan memakai local asset |
-| WV-04 | JavaScript default mati |
-| WV-05 | Navigasi eksternal diblokir; remote origin kelak harus di-allowlist |
+| WV-03 | Konten latihan membuka `https://www.presisirencar.com/` |
+| WV-04 | JavaScript aktif untuk interaksi situs, tanpa JavaScript bridge |
+| WV-05 | Hanya HTTPS ke `presisirencar.com` dan `www.presisirencar.com` yang diizinkan |
 | WV-06 | Tidak ada API key/token di HTML, JS, URL query, asset, atau log |
 | WV-07 | WebView bukan alasan untuk menghindari migrasi native Flutter tanpa keputusan produk |
 | WV-08 | Navigation policy dipisah sebagai pure function dan mempunyai unit test |
@@ -63,7 +63,7 @@ flutter_projects/hari_3_dpl_inspection_release/
 
 Skill mengharuskan agent membaca PRD/source/test, menyebut unknown, membuat patch
 kecil, menjalankan quality gate, dan melaporkan gap. Agent dilarang mengarang
-contract, memperluas JavaScript/origin WebView, membocorkan secret, atau mengaku
+contract, memperluas origin/bridge WebView, membocorkan secret, atau mengaku
 telah menjalankan test tanpa evidence.
 
 ## Acceptance criteria
@@ -74,8 +74,8 @@ telah menjalankan test tanpa evidence.
 | AC2 | PRD slice daftar-detail mempunyai AC dan out-of-scope |
 | AC3 | Daftar/detail Flutter memakai ID yang sama dan navigation parity |
 | AC4 | Loading/empty/error/retry dapat dibedakan |
-| AC5 | WebView local asset berhasil dibuka |
-| AC6 | JavaScript mati dan external link ditolak |
+| AC5 | WebView berhasil membuka `https://www.presisirencar.com/` |
+| AC6 | Exact-host allowlist lulus dan external link ditolak |
 | AC7 | Skill valid dan path dapat ditemukan tool |
 | AC8 | Prompt/context bebas credential dan data sensitif |
 | AC9 | `flutter analyze` bersih dan seluruh test hijau |

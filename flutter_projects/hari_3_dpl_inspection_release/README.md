@@ -4,7 +4,7 @@ Proyek Flutter untuk belajar memigrasikan satu vertical slice aplikasi Android
 Kotlin ke Flutter berdasarkan PRD. Demo menyatukan empat area:
 
 1. PRD migrasi dan acceptance criteria.
-2. WebView lokal yang dibatasi.
+2. WebView situs latihan yang dibatasi host.
 3. Target Flutter daftar/detail inspeksi dan foto lokal.
 4. Agent Skill `migrate-kotlin-slice` untuk workflow migrasi yang repeatable.
 
@@ -33,9 +33,11 @@ fvm flutter build apk --debug
 
 ## WebView boundary
 
-WebView membuka `assets/migration_guide.html`, bukan situs remote. JavaScript
-dimatikan dan `NavigationDelegate` hanya mengizinkan navigasi lokal. Tautan
-eksternal dalam halaman sengaja disediakan untuk menguji blokir navigasi.
+WebView membuka `https://www.presisirencar.com/`. JavaScript diaktifkan karena
+situs latihan memakai interaksi Next.js, tetapi tidak ada JavaScript bridge ke
+Flutter. `NavigationDelegate` hanya mengizinkan HTTPS ke `presisirencar.com`
+dan `www.presisirencar.com`; HTTP, subdomain palsu, scheme lain, serta tautan
+eksternal diblokir.
 
 Source WebView dipisah agar mudah dibedah:
 
@@ -45,12 +47,13 @@ lib/src/webview/migration_webview_controller.dart
 lib/src/screens/training_webview_screen.dart
 ```
 
-Policy URL dapat diuji tanpa platform view, controller memegang konfigurasi
-security/lifecycle, dan screen hanya merender progress, error, serta WebView.
+Policy URL dapat diuji tanpa platform view, controller memegang URL dan
+konfigurasi security/lifecycle, dan screen hanya merender progress, error,
+back, reload, serta WebView.
 
-Jika WebView kelak membuka origin produksi, definisikan allowlist host, session,
-back behavior, TLS, file upload/download, dan logout di PRD. Jangan pernah
-menyisipkan API key provider AI ke Flutter, HTML, JavaScript, atau asset aplikasi.
+Jika origin berubah, revisi PRD, allowlist, session, TLS, file upload/download,
+dan logout sebelum mengubah kode. Jangan pernah menyisipkan API key provider AI
+ke Flutter, HTML, JavaScript, URL, atau asset aplikasi.
 
 ## Agent Skill
 
