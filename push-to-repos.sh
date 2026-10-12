@@ -64,6 +64,10 @@ push_project() {
   local folder="$1"
   local remote_url="$2"
   local project_path="$PROJECTS_ROOT/$folder"
+  local project_relative_path="flutter_projects/$folder"
+  local temp_root
+  local source_path
+  local checkout_path
   local configured_remote
   local staged_files
   local file
@@ -73,53 +77,61 @@ push_project() {
     exit 1
   fi
 
-  if [[ "$(git -C "$project_path" rev-parse --show-toplevel 2>/dev/null || true)" != "$project_path" ]]; then
-    git -C "$project_path" init -b main
-  fi
+  temp_root="$(mktemp -d "${TMPDIR:-/tmp}/dpl-push.XXXXXX")"
+  source_path="$temp_root/source"
+  checkout_path="$temp_root/repository"
+  mkdir -p "$source_path"
+  PUSH_TEMP_DIR="$temp_root"
 
-  if git -C "$project_path" remote get-url origin >/dev/null 2>&1; then
-    configured_remote="$(git -C "$project_path" remote get-url origin)"
-    if [[ "$configured_remote" != "$remote_url" ]]; then
-      echo "ERROR: origin di $folder mengarah ke remote berbeda: $configured_remote" >&2
-      exit 1
-    fi
-  else
-    git -C "$project_path" remote add origin "$remote_url"
-  fi
-
-  if [[ -n "$(git -C "$project_path" diff --cached --name-only)" ]]; then
-    echo "ERROR: $folder sudah memiliki perubahan yang di-stage. Periksa dulu sebelum push." >&2
+  if ! git clone --quiet --branch main --single-branch "$remote_url" "$checkout_path"; then
+    echo "ERROR: tidak dapat meng-clone branch main dari $remote_url" >&2
     exit 1
   fi
 
-  local author_name="${GIT_AUTHOR_NAME:-$(git -C "$REPO_ROOT" config user.name || true)}"
-  local author_email="${GIT_AUTHOR_EMAIL:-$(git -C "$REPO_ROOT" config user.email || true)}"
-  if [[ -z "$author_name" || -z "$author_email" ]]; then
-    echo "ERROR: identitas Git belum lengkap. Atur user.name dan user.email terlebih dahulu." >&2
-    exit 1
-  fi
+  git -C "$REPO_ROOT" archive --format=tar HEAD "$project_relative_path" |
+    tar -xf - -C "$source_path" --strip-components=2
 
-  git -C "$project_path" add -A
-  staged_files="$(git -C "$project_path" diff --cached --name-only)"
   while IFS= read -r file; do
     [[ -z "$file" ]] && continue
     if is_sensitive_file "$file"; then
       echo "ERROR: file berpotensi sensitif tidak akan di-push: $folder/$file" >&2
       exit 1
     fi
+  done < <(find "$source_path" -type f -print)
+
+  rsync -a --delete --exclude='/.git/' "$source_path/" "$checkout_path/"
+  git -C "$checkout_path" add -A
+  staged_files="$(git -C "$checkout_path" diff --cached --name-only)"
+
+  while IFS= read -r file; do
+    [[ -z "$file" ]] && continue
+    if is_sensitive_file "$file"; then
+      echo "ERROR: file berpotensi sensitif ter-stage dan push dibatalkan: $folder/$file" >&2
+      exit 1
+    fi
   done <<< "$staged_files"
 
-  if ! git -C "$project_path" diff --cached --quiet; then
-    git -C "$project_path" -c user.name="$author_name" -c user.email="$author_email" \
+  if ! git -C "$checkout_path" diff --cached --quiet; then
+    local author_name="${GIT_AUTHOR_NAME:-$(git -C "$REPO_ROOT" config user.name || true)}"
+    local author_email="${GIT_AUTHOR_EMAIL:-$(git -C "$REPO_ROOT" config user.email || true)}"
+    if [[ -z "$author_name" || -z "$author_email" ]]; then
+      echo "ERROR: identitas Git belum lengkap. Atur user.name dan user.email terlebih dahulu." >&2
+      exit 1
+    fi
+
+    git -C "$checkout_path" -c user.name="$author_name" -c user.email="$author_email" \
       commit -m "$COMMIT_MSG"
   fi
 
-  git -C "$project_path" branch -M main
-
   echo -e "${BLUE}Push $folder: $remote_url${NC}"
-  git -C "$project_path" push -u origin main
+  git -C "$checkout_path" push -u origin main
   echo -e "${GREEN}Push $folder berhasil.${NC}"
+  rm -rf -- "$temp_root"
+  PUSH_TEMP_DIR=""
 }
+
+PUSH_TEMP_DIR=""
+trap 'if [[ -n "$PUSH_TEMP_DIR" ]]; then rm -rf -- "$PUSH_TEMP_DIR"; fi' EXIT
 
 case "$TARGET" in
   all|main|day2|day3) ;;
