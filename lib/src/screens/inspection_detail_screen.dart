@@ -27,7 +27,7 @@ class InspectionDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             _DetailRow(
-              icon: Icons.place_outlined,
+              icon: Icons.location_on_outlined,
               label: 'Lokasi',
               value: item.location,
             ),
