@@ -22,6 +22,26 @@ JSONPlaceholder /posts
 JsonPlaceholderMapper berada antara JSON publik dan model domain Inspection.
 ```
 
+## 0. Mulai dari nol
+
+```sh
+fvm install 3.44.8 && fvm global 3.44.8
+fvm flutter create --platforms=android,ios \
+  --org id.co.dokpantailamongan \
+  --project-name dpl_inspection_day_2 hari_2_dpl_inspection_api
+cd hari_2_dpl_inspection_api && fvm use 3.44.8
+```
+
+Hapus counter app dan `test/widget_test.dart`, lalu buat folder `config`,
+`models`, `data/crud`, `controllers`, `screens`, dan `env`. Setelah dependency
+(langkah 1), set `IPHONEOS_DEPLOYMENT_TARGET = 14.0` (`file_picker` butuh iOS 14)
+dan buat `env/dev.json` + `lib/src/config/env.dart` sebelum menulis endpoint.
+Run pertama:
+
+```sh
+fvm flutter run -d "iPhone 16" --dart-define-from-file=env/dev.json
+```
+
 ## 1. `pubspec.yaml` — dependency
 
 Tambahkan package:

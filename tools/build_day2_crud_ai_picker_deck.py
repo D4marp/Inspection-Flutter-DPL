@@ -15,7 +15,7 @@ import build_professional_decks as d
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TOTAL = 41
+TOTAL = 50
 
 
 def notes(slide, session, minutes, objective, delivery, question, reference):
@@ -49,6 +49,15 @@ def lab(prs, n, title, tasks, evidence, stretch, duration):
     return slide
 
 
+def code_step(prs, n, section, title, code, label, highlight, size, card_a, card_b, note):
+    slide = d.base_slide(prs, section, title, n, TOTAL, 2)
+    d.add_code(slide, code, Inches(0.60), Inches(1.20), Inches(7.15), Inches(5.58), label=label, highlight=highlight, size=size)
+    d.add_card(slide, Inches(8.05), Inches(1.25), Inches(4.66), Inches(2.42), card_a[0], card_a[1], icon=card_a[2], accent=card_a[3], body_size=13)
+    d.add_card(slide, Inches(8.05), Inches(3.95), Inches(4.66), Inches(2.78), card_b[0], card_b[1], icon=card_b[2], accent=card_b[3], body_size=13)
+    notes(slide, "Bootstrap", 8, note[0], note[1], note[2], note[3])
+    return slide
+
+
 def build(background: Path) -> Path:
     prs = Presentation()
     prs.slide_width = d.SW
@@ -69,7 +78,7 @@ def build(background: Path) -> Path:
     n += 1
 
     s = d.add_agenda_slide(prs, 2, n, TOTAL, [
-        ("08.30", "UI composition", "Scaffold, AppBar, Row, Column, Form"),
+        ("08.30", "Bootstrap + UI", "flutter create dari nol, ENV, Scaffold, Form"),
         ("10.15", "Public CRUD API", "JSONPlaceholder, mapper, GET/POST/PUT/DELETE"),
         ("13.00", "Image & file picker", "Preview, metadata, lifecycle, scope"),
         ("14.45", "OpenCode & API key", "Install, connect, model, secret boundary"),
@@ -84,6 +93,39 @@ def build(background: Path) -> Path:
         ("Tetap dijaga", ["Validation", "Error state", "No secret", "Reproducible build"], "✓", d.GREEN),
     ], "Hari 2 menghubungkan UI ke contract nyata tanpa mencampur secret atau infrastructure ke widget.")
     notes(s, "08.50–09.00", 10, "Memastikan baseline Hari 1.", "Jalankan smoke list/detail/form lokal sebelum refactor.", "Bagian mana harus tetap bekerja?", "Checkpoint day-1.")
+    n += 1
+
+    s = d.add_section_slide(prs, 2, n, TOTAL, "00", "Mulai dari nol", "Peserta membuat project Hari 2 sendiri: flutter create, dependency, ENV, lalu layer demi layer sampai CRUD berjalan di iPhone 16.", ["flutter create", "Dependency + ENV", "Run pertama"])
+    notes(s, "Bootstrap", 2, "Membuka sesi bootstrap.", "Pastikan folder kerja kosong; tidak ada peserta yang menyalin project jadi.", "Apa evidence project siap dikerjakan?", "docs/JSONPLACEHOLDER_PER_FILE.md.")
+    n += 1
+
+    s = code_step(prs, n, "STEP 1", "Siapkan toolchain dan simulator", "# Versi kelas\nfvm install 3.44.8\nfvm global 3.44.8\n\nfvm flutter --version\nfvm flutter doctor\n\n# Simulator iPhone 16\nxcrun simctl list devices | grep \"iPhone 16\"\nopen -a Simulator", "TERMINAL", "3.44.8", 12.5, ("Checkpoint", ["Flutter 3.44.8 / Dart 3.12", "doctor: Xcode hijau", "iPhone 16 terdeteksi"], "✓", d.GREEN), ("Jika gagal", ["Xcode license belum diterima", "Simulator belum dibuat", "Versi Flutter berbeda"], "!", d.RED), ("Memastikan toolchain sama.", "Jalankan doctor bersama; selesaikan error sebelum lanjut.", "Mengapa versi Flutter dikunci?", "README flutter_projects."))
+    n += 1
+
+    s = code_step(prs, n, "STEP 2", "flutter create — project baru yang kosong", "fvm flutter create \\\n  --platforms=android,ios \\\n  --org id.co.dokpantailamongan \\\n  --project-name dpl_inspection_day_2 \\\n  hari_2_dpl_inspection_api\n\ncd hari_2_dpl_inspection_api\nfvm use 3.44.8      # tulis .fvmrc\ngit init", "TERMINAL", "NEW", 12.2, ("Dihasilkan", ["lib/main.dart", "android/ + ios/", "pubspec.yaml", "test/widget_test.dart"], "+", d.CYAN), ("Aturan nama", ["--project-name: snake_case", "--org: reverse domain", "Folder = nama repo"], "N", d.GOLD), ("Membuat project dari nol.", "Peserta mengetik sendiri perintah; jelaskan arti setiap flag.", "Apa fungsi --org?", "flutter create docs."))
+    n += 1
+
+    s = code_step(prs, n, "STEP 3", "Tentukan struktur folder sebelum coding", "lib/\n├── main.dart\n└── src/\n    ├── app.dart\n    ├── config/        env.dart, api_endpoints.dart\n    ├── models/        inspection.dart\n    ├── data/\n    │   ├── crud/      read / create / update / delete\n    │   ├── json_placeholder_mapper.dart\n    │   ├── api_client.dart\n    │   └── inspection_repository.dart\n    ├── controllers/   inspection_controller.dart\n    └── screens/       home, form, detail\nenv/                   dev.json, prod.json\ntest/", "SOURCE TREE", "EMPTY DIRS", 10.8, ("Arah dependency", ["screens → controller", "controller → repository", "repository → api → crud", "models di paling bawah"], "↓", d.CYAN), ("Hapus template", ["Counter app di main.dart", "test/widget_test.dart lama"], "x", d.RED), ("Merancang struktur.", "Gambar tree di whiteboard; peserta membuat folder dengan mkdir -p.", "Mengapa UI tidak boleh import crud langsung?", "Arsitektur akhir di per-file guide."))
+    n += 1
+
+    s = code_step(prs, n, "STEP 4", "Tambah dependency dan set iOS 14", "fvm flutter pub add \\\n  http shared_preferences \\\n  image_picker file_picker\n\nfvm flutter pub get\n\n# ios/Runner.xcodeproj\nIPHONEOS_DEPLOYMENT_TARGET = 14.0\n\n# ios/Runner/Info.plist\nNSPhotoLibraryUsageDescription", "TERMINAL + IOS", "IOS 14+", 12.2, ("Fungsi paket", ["http: GET/POST/PUT/DELETE", "shared_preferences: cache", "image_picker: galeri", "file_picker: dokumen"], "P", d.CYAN), ("Gotcha iOS", ["file_picker butuh iOS 14", "Default template 13.0 → build gagal", "Izin foto di Info.plist"], "!", d.GOLD), ("Menambah dependency dan memperbaiki build iOS.", "Tunjukkan error deployment target lalu perbaiki di Xcode General tab.", "Mengapa pubspec.lock di-commit?", "pub.dev package pages."))
+    n += 1
+
+    s = code_step(prs, n, "STEP 5", "Buat ENV sebelum menulis endpoint", "mkdir env\n\n# env/dev.json\n{\n  \"ENV_NAME\": \"dev\",\n  \"API_BASE_URL\": \"https://jsonplaceholder.typicode.com\",\n  \"API_POSTS_PATH\": \"/posts\"\n}\n\n# .gitignore\nenv/local.json\n\n# lib/src/config/env.dart\nString.fromEnvironment('API_BASE_URL')", "ENV", "NO HARDCODE", 11.4, ("Urutan", ["1  env/dev.json", "2  env.dart", "3  api_endpoints.dart"], "E", d.CYAN), ("Aturan", ["Hanya nilai non-rahasia", "Satu file per environment", "Detail ada di slide ENV"], "R", d.GOLD), ("Membuat konfigurasi pertama.", "Ketik env.dart bersama; jelaskan const compile-time.", "Mengapa ENV dibuat sebelum data layer?", "env/README.md."))
+    n += 1
+
+    s = d.base_slide(prs, "STEP 6", "Urutan membuat file: dari dependency terendah", n, TOTAL, 2)
+    d.add_card(s, Inches(0.60), Inches(1.25), Inches(7.35), Inches(5.45), "Build order + checkpoint", ["1  models/inspection.dart  →  test round-trip", "2  json_placeholder_mapper.dart  →  test mapper", "3  data/crud/ ×4  →  MockClient test", "4  api_client.dart  →  facade test", "5  inspection_repository.dart  →  cache test", "6  inspection_controller.dart  →  state test", "7  app.dart + screens  →  widget test"], icon="7", accent=d.CYAN, body_size=14)
+    d.add_card(s, Inches(8.28), Inches(1.25), Inches(4.43), Inches(2.45), "Aturan kerja", ["Satu file → satu test", "analyze hijau tiap langkah", "Commit per layer"], icon="✓", accent=d.GREEN, body_size=12)
+    d.add_card(s, Inches(8.28), Inches(4.00), Inches(4.43), Inches(2.70), "Kode lengkap", ["docs/JSONPLACEHOLDER_PER_FILE.md", "Slide section 02", "Referensi project jadi"], icon="D", accent=d.GOLD, body_size=12)
+    notes(s, "Bootstrap", 6, "Menyepakati urutan implementasi.", "Tunjukkan bahwa tiap layer hanya bergantung ke layer di bawahnya.", "Mengapa model dibuat paling awal?", "docs/JSONPLACEHOLDER_PER_FILE.md.")
+    n += 1
+
+    s = code_step(prs, n, "STEP 7", "Run pertama di iPhone 16 Simulator", "// lib/main.dart\nvoid main() {\n  WidgetsFlutterBinding.ensureInitialized();\n  runApp(const DplInspectionApp());\n}\n\n# terminal\nfvm flutter run -d \"iPhone 16\" \\\n  --dart-define-from-file=env/dev.json\n\n# r = hot reload   R = restart", "MAIN + RUN", "FIRST RUN", 11.6, ("Yang terlihat", ["3 tab: CRUD, UI, AI", "Daftar POST-001…", "Banner simulasi"], "✓", d.GREEN), ("Build pertama lambat", ["Xcode + pods ± beberapa menit", "Run berikutnya cepat", "Hot reload untuk UI"], "⏱", d.GOLD), ("Menjalankan app pertama kali.", "Jalankan di iPhone 16; ubah satu teks lalu hot reload.", "Beda hot reload dan restart?", "flutter run docs."))
+    n += 1
+
+    s = lab(prs, n, "Lab 0 — Bootstrap project dari nol", ["flutter create + fvm use", "pub add 4 dependency", "iOS target 14.0", "Buat env/dev.json + env.dart", "Buat struktur folder kosong", "Run kosong di iPhone 16"], ["analyze tanpa issue", "App tampil di simulator", "Commit pertama bersih"], ["Tambah env/prod.json", "Tampilkan ENV_NAME di AppBar"], "30 MENIT")
+    notes(s, "Bootstrap", 30, "Memastikan semua peserta punya project awal yang sama.", "Pair peserta yang selesai dengan yang tertinggal; jangan lanjut sebelum semua run.", "Apa yang membuktikan setup benar?", "Lab 0.")
     n += 1
 
     s = d.add_section_slide(prs, 2, n, TOTAL, "01", "Flutter UI foundations", "Pahami ownership layout dan form sebelum menghubungkannya ke network atau agent.", ["Bangun page shell", "Atur constraints", "Validasi form"])
